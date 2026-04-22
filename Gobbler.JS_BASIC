@@ -1,3 +1,26 @@
+async function forceInputAlphaNumeric(promptMessage) {
+  while (true) {
+    let input = await INPUT(promptMessage);
+    if (input && input.trim().length > 0) {
+      return input.trim(); 
+    }
+    PRINT(translate["Input cannot be empty. Please try again."],2);
+  }
+}
+async function forceInputNumeric(message) {
+    let userInput;
+    let number;
+
+    while (true) {
+        userInput = await INPUT(message); 
+        number = Number(userInput);
+        if (userInput !== null && userInput.trim() !== translate[""] && !isNaN(number)) {
+            return number;
+        }
+        PRINT(translate["Invalid input. Please enter a valid number."],2);
+    }
+}
+
 let board = Array.from({ length: 3 }, () => 
     Array.from({ length: 3 }, () => Array(3).fill(-1))
 );
@@ -226,17 +249,19 @@ async function gameLoop() {
         }
 
         if (pl === 0) {
-            let choice = await INPUT("\nYOU (1:NEW 2:MOV): ");
-            let t = parseInt(choice);
+            let t = await forceInputNumeric("\nYOU (1:NEW 2:MOV): ");
             if (t === 1) {
-                let params = await INPUT("SIZE(0-2) R C: ");
-                let [sz, r, c] = params.split(" ").map(Number);
+                let sz = await forceInputNumeric("SIZE(0-2) R C: ");
+                let r = await forceInputNumeric("ROW: ");
+                let c = await forceInputNumeric("COL: ");
                 if (piece_new(0, sz, r, c)) pl = 1;
             } else if (t === 2) {
-                let from = await INPUT("FROM R C: ");
-                let [r, c] = from.split(" ").map(Number);
-                let to = await INPUT("TO R C: ");
-                let [r2, c2] = to.split(" ").map(Number);
+                let from = await INPUT("FROM: ");
+                let r = await forceInputNumeric("ROW: ");
+                let c = await forceInputNumeric("COL: ");
+                let to = await INPUT("TO: ");
+                let r2 = await forceInputNumeric("ROW: ");
+                let c2 = await forceInputNumeric("COL: ");
                 if (piece_move(0, r, c, r2, c2)) pl = 1;
             }
         } else {

@@ -1,0 +1,312 @@
+const LEVELS = [
+    { grid:[".....","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:[".....",".*.*.","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["..*..",".....","..^..","..*.."], start:{x:2,y:2,dir:0} },
+    { grid:[".....","..*..",".....","..^.."], start:{x:2,y:3,dir:0} },
+    { grid:[".....","*****","..^..","....."], start:{x:2,y:2,dir:0} },
+
+    { grid:["..r..","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["..g..","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["..b..","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:[".r.r.","..*..","..^..",".r.r."], start:{x:2,y:2,dir:0} },
+    { grid:[".g.g.","..*..","..^..",".g.g."], start:{x:2,y:2,dir:0} },
+
+    { grid:["*...*","..^..","*...*","....."], start:{x:2,y:1,dir:0} },
+    { grid:["*.*.*","..^..","*.*.*","....."], start:{x:2,y:1,dir:0} },
+    { grid:["..*..",".***.","..^..","..*.."], start:{x:2,y:2,dir:0} },
+    { grid:["*****","..^..","*****","....."], start:{x:2,y:1,dir:2} },
+    { grid:["*...*",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+
+    { grid:["r...r","..*..","..^..","r...r"], start:{x:2,y:2,dir:0} },
+    { grid:["g...g","..*..","..^..","g...g"], start:{x:2,y:2,dir:0} },
+    { grid:["b...b","..*..","..^..","b...b"], start:{x:2,y:2,dir:0} },
+    { grid:["rgrgr","..*..","..^..","rgrgr"], start:{x:2,y:2,dir:0} },
+    { grid:["bgbgb","..*..","..^..","bgbgb"], start:{x:2,y:2,dir:0} },
+
+    { grid:["..r..",".***.","..^..",".***."], start:{x:2,y:2,dir:0} },
+    { grid:["..g..","*...*","..^..","*...*"], start:{x:2,y:2,dir:0} },
+    { grid:["..b..","*****","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["r*g*b","..^..","b*g*r","....."], start:{x:2,y:1,dir:0} },
+    { grid:["*r*g*","..^..","*b*g*","....."], start:{x:2,y:1,dir:0} },
+
+    { grid:["r.r.r",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+    { grid:["g.g.g",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+    { grid:["b.b.b",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+    { grid:["rgbgr","*...*","..^..","*...*"], start:{x:2,y:2,dir:0} },
+    { grid:["bgrgb","*.*.*","..^..","*.*.*"], start:{x:2,y:2,dir:0} }
+];
+let levelIndex = 0;
+
+function getCurrentLevel() {
+    return LEVELS[levelIndex];
+}
+let dx = [0, 1, 0, -1];
+let dy = [-1, 0, 1, 0];
+
+let PROGRAM = [
+    "        ",
+    "        ",
+    "        ",
+    "        ",
+    "        ",
+    "        ",
+    "        ",
+    "        "
+];
+
+function getTileBgColor(ch) {
+    if (ch === "r") return 10;
+    if (ch === "g") return 13;
+    if (ch === "b") return 14;
+    return 0;
+}
+
+function getPlayerChar(dir) {
+    if (dir === 0) return "^";
+    if (dir === 1) return ">";
+    if (dir === 2) return "v";
+    if (dir === 3) return "<";
+    return "^";
+}
+
+function countStars(grid) {
+    let c = 0;
+    for (let r of grid) {
+        for (let ch of r) {
+            if (ch === "*") c++;
+        }
+    }
+    return c;
+}
+
+function matchesColor(cmd, tile) {
+    if (cmd === "r") return tile === "r";
+    if (cmd === "g") return tile === "g";
+    if (cmd === "b") return tile === "b";
+
+    if (cmd === "L") return tile === "r";
+    if (cmd === "G") return tile === "g";
+    if (cmd === "B") return tile === "b";
+
+    if (cmd === "R") return tile === "r";
+    if (cmd === "Y") return tile === "g";
+    if (cmd === "Z") return tile === "b";
+
+    return true;
+}
+
+async function showHelp() {
+    let text =
+"=== ROBOZZLE COMMANDS ===\n\n" +
+
+"MOVEMENT:\n" +
+"^  = move forward\n" +
+"<  = turn left\n" +
+">  = turn right\n\n" +
+
+"FUNCTION CALLS:\n" +
+"1 = call F1\n" +
+"2 = call F2\n" +
+"3 = call F3\n" +
+"4 = call F4\n\n" +
+
+"COLOR TILES (MAP):\n" +
+"r = red tile\n" +
+"g = green tile\n" +
+"b = blue tile\n" +
+"* = star (collect)\n\n" +
+
+"COLOR-CONDITIONAL COMMANDS:\n" +
+"r = move only on red\n" +
+"g = move only on green\n" +
+"b = move only on blue\n\n" +
+
+"L = turn left only on red\n" +
+"G = turn left only on green\n" +
+"B = turn left only on blue\n\n" +
+
+"R = turn right only on red\n" +
+"Y = turn right only on green\n" +
+"Z = turn right only on blue\n\n" +
+
+"PROGRAM EDITING:\n" +
+"E function col cmd\n" +
+"example: E 0 0 ^\n\n" +
+
+"OTHER COMMANDS:\n" +
+"RUN  = execute program\n" +
+"HELP = show this screen\n" +
+"QUIT = exit\n";
+
+    await MORE(text);
+    await PRINT("PRESS ENTER TO CONTINUE");
+    await INPUT();
+}
+
+async function drawGrid(level, player) {
+    if (!player) {
+        player = { x: -1, y: -1, dir: 0 };
+    }
+
+    for (let y = 0; y < level.grid.length; y++) {
+        for (let x = 0; x < level.grid[y].length; x++) {
+            let ch = level.grid[y][x];
+            let bg = getTileBgColor(ch);
+
+            let out = " ";
+            let fg = 12;
+
+            if (ch === "*") {
+                out = "*";
+                fg = 12;
+            }
+
+            if (player.x === x && player.y === y) {
+                out = getPlayerChar(player.dir);
+                COLOR(0, 12);
+                LOCATE(x, y + 2);
+                await PRINT(out);
+                continue;
+            }
+            COLOR(fg, bg);
+            LOCATE(x, y + 2);
+            await PRINT(out);
+        }
+    }
+
+    COLOR(1, 0);
+}
+async function CLS() {
+    for(a=1;a<25;a++) {
+        await PRINT("");
+    }
+    await LOCATE(0,0)
+}
+
+async function drawAll() {
+    await PRINT("");
+    await COLOR(1, 0);
+    await CLS();
+
+    await PRINT("=== GRID ===");
+    await drawGrid(getCurrentLevel(), {
+        x: getCurrentLevel().start.x,
+        y: getCurrentLevel().start.y,
+        dir: getCurrentLevel().start.dir
+    });
+
+    await PRINT("");
+    await PRINT("=== PROGRAM ===");
+    await PRINT("COL:0123456789");
+    for (let i = 0; i < PROGRAM.length; i++) {
+        await PRINT("F" + (i) + " :" + PROGRAM[i]);
+    }
+}
+async function runProgram() {
+    let level = JSON.parse(JSON.stringify(getCurrentLevel()));
+
+    let player = {
+        x: level.start.x,
+        y: level.start.y,
+        dir: level.start.dir
+    };
+
+    let stars = countStars(level.grid);
+    let stack = [{ fn: 0, pos: 0 }];
+
+    levelIndex++;
+    if (levelIndex >= LEVELS.length) levelIndex = 0;
+
+    await PRINT("RUNNING...");
+
+    while (stack.length > 0) {
+        let frame = stack[stack.length - 1];
+        let row = PROGRAM[frame.fn];
+
+        if (frame.pos >= row.length) {
+            stack.pop();
+            continue;
+        }
+
+        let cmd = row[frame.pos];
+        frame.pos++;
+
+        if (cmd === " " || !cmd) continue;
+
+        let tile = level.grid[player.y][player.x];
+
+        if (!matchesColor(cmd, tile)) continue;
+
+        if (cmd === "^" || cmd === "r" || cmd === "g" || cmd === "b") {
+            let nx = player.x + dx[player.dir];
+            let ny = player.y + dy[player.dir];
+
+            if (ny < 0 || ny >= level.grid.length || nx < 0 || nx >= level.grid[0].length) {
+                await PRINT("CRASH");
+                return;
+            }
+
+            player.x = nx;
+            player.y = ny;
+
+            let rowArr = level.grid[ny].split("");
+            if (rowArr[nx] === "*") {
+                rowArr[nx] = ".";
+                level.grid[ny] = rowArr.join("");
+                stars--;
+            }
+        } else if (cmd === "<" || cmd === "L" || cmd === "G" || cmd === "B") {
+            player.dir = (player.dir + 3) % 4;
+        } else if (cmd === ">" || cmd === "R" || cmd === "Y" || cmd === "Z") {
+            player.dir = (player.dir + 1) % 4;
+        } else if (cmd >= "1" && cmd <= "4") {
+            let fn = parseInt(cmd) - 1;
+            stack.push({ fn: fn, pos: 0 });
+        }
+
+        await drawGrid(level, player);
+
+        if (stars === 0) {
+            await PRINT("SOLVED!");
+            return;
+        }
+    }
+
+    await PRINT("END");
+}
+
+async function main() {
+    while (true) {
+        await drawAll();
+
+        let cmd = await INPUT("E Fn COL cmd | RUN | HELP | QUIT");
+        let p = cmd.trim().split(" ");
+
+        if (p[0].toUpperCase() === "HELP") {
+            await showHelp();
+        }
+        else if (p[0].toUpperCase() === "E") {
+            let r = parseInt(p[1]);
+            let c = parseInt(p[2]);
+            let v = (p[3] || " ").toUpperCase();
+
+            if (!isNaN(r) && !isNaN(c) && r >= 0 && r < PROGRAM.length && c >= 0 && c < 8) {
+                let row = PROGRAM[r].split("");
+                row[c] = v[0] || " ";
+                PROGRAM[r] = row.join("");
+            }
+        }
+        else if (p[0].toUpperCase() === "RUN") {
+            await runProgram();
+            await PRINT("PROGRAM ENDED PRESS ENTER TO CONTINUE");
+            await INPUT();
+        }
+        else if (p[0].toUpperCase() === "QUIT") {
+            break;
+        }
+    }
+}
+
+(async () => {
+    await main();
+})();
