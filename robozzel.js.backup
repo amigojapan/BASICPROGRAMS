@@ -213,12 +213,12 @@ async function runProgram() {
 
     let stars = countStars(level.grid);
     let stack = [{ fn: 0, pos: 0 }];
-
+    running = false;
     levelIndex++;
     if (levelIndex >= LEVELS.length) levelIndex = 0;
 
-    await PRINT("RUNNING...");
-
+    await CLS();
+    
     while (stack.length > 0) {
         let frame = stack[stack.length - 1];
         let row = PROGRAM[frame.fn];
