@@ -1,59 +1,45 @@
-let LEVELIndex = 0;
 const LEVELS = [
+    { grid:[".....","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:[".....",".*.*.","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["..*..",".....","..^..","..*.."], start:{x:2,y:2,dir:0} },
+    { grid:[".....","..*..",".....","..^.."], start:{x:2,y:3,dir:0} },
+    { grid:[".....","*****","..^..","....."], start:{x:2,y:2,dir:0} },
 
-/* ===== EASY ===== */
+    { grid:["..r..","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["..g..","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["..b..","..*..","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:[".r.r.","..*..","..^..",".r.r."], start:{x:2,y:2,dir:0} },
+    { grid:[".g.g.","..*..","..^..",".g.g."], start:{x:2,y:2,dir:0} },
 
-{grid:[".....","..*..","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:[".....","..*..",".....","..^.."],start:{x:2,y:3,dir:0}},
-{grid:[".....","..*..","..*..","..^.."],start:{x:2,y:3,dir:0}},
-{grid:[".....",".***.","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["..*..","..*..","..^..","..*.."],start:{x:2,y:2,dir:0}},
+    { grid:["*...*","..^..","*...*","....."], start:{x:2,y:1,dir:0} },
+    { grid:["*.*.*","..^..","*.*.*","....."], start:{x:2,y:1,dir:0} },
+    { grid:["..*..",".***.","..^..","..*.."], start:{x:2,y:2,dir:0} },
+    { grid:["*****","..^..","*****","....."], start:{x:2,y:1,dir:2} },
+    { grid:["*...*",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
 
-/* ===== TURNING ===== */
+    { grid:["r...r","..*..","..^..","r...r"], start:{x:2,y:2,dir:0} },
+    { grid:["g...g","..*..","..^..","g...g"], start:{x:2,y:2,dir:0} },
+    { grid:["b...b","..*..","..^..","b...b"], start:{x:2,y:2,dir:0} },
+    { grid:["rgrgr","..*..","..^..","rgrgr"], start:{x:2,y:2,dir:0} },
+    { grid:["bgbgb","..*..","..^..","bgbgb"], start:{x:2,y:2,dir:0} },
 
-{grid:[".....","*...*","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:[".....","*.*.*","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:[".*.*.",".....","..^..",".*.*."],start:{x:2,y:2,dir:0}},
-{grid:["*...*",".....","..^..","*...*"],start:{x:2,y:2,dir:0}},
-{grid:[".*.*.","*...*","..^..",".*.*."],start:{x:2,y:2,dir:0}},
+    { grid:["..r..",".***.","..^..",".***."], start:{x:2,y:2,dir:0} },
+    { grid:["..g..","*...*","..^..","*...*"], start:{x:2,y:2,dir:0} },
+    { grid:["..b..","*****","..^..","....."], start:{x:2,y:2,dir:0} },
+    { grid:["r*g*b","..^..","b*g*r","....."], start:{x:2,y:1,dir:0} },
+    { grid:["*r*g*","..^..","*b*g*","....."], start:{x:2,y:1,dir:0} },
 
-/* ===== PATH PATTERNS ===== */
-
-{grid:["*****",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:[".....","*****","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["*.*.*",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:[".*.*.","..*..","..^..","..*.."],start:{x:2,y:2,dir:0}},
-{grid:["*****","..^..","*****","....."],start:{x:2,y:1,dir:2}},
-
-/* ===== COLORS INTRO ===== */
-
-{grid:["..r..","..*..","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["..g..","..*..","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["..b..","..*..","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["r*r*r",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["g*g*g",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-
-/* ===== COLOR LOGIC ===== */
-
-{grid:["rgrgr",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["b*b*b",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["rgbgr",".....","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["r...r",".*.*.","..^..",".*.*."],start:{x:2,y:2,dir:0}},
-{grid:["g...g",".*.*.","..^..",".*.*."],start:{x:2,y:2,dir:0}},
-
-/* ===== FUNCTIONS ===== */
-
-{grid:[".....","*****","..^..","....."],start:{x:2,y:2,dir:0}},
-{grid:["*.*.*","*...*","..^..","*...*"],start:{x:2,y:2,dir:0}},
-{grid:["*****","*...*","..^..","*...*"],start:{x:2,y:2,dir:0}},
-{grid:["*.*.*",".*.*.","..^..",".*.*."],start:{x:2,y:2,dir:0}},
-{grid:["*****",".***.","..^..",".***."],start:{x:2,y:2,dir:0}}
-
+    { grid:["r.r.r",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+    { grid:["g.g.g",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+    { grid:["b.b.b",".*.*.","..^..",".*.*."], start:{x:2,y:2,dir:0} },
+    { grid:["rgbgr","*...*","..^..","*...*"], start:{x:2,y:2,dir:0} },
+    { grid:["bgrgb","*.*.*","..^..","*.*.*"], start:{x:2,y:2,dir:0} }
 ];
+let levelIndex = 0;
+
 function getCurrentLevel() {
     return LEVELS[levelIndex];
 }
-
 let dx = [0, 1, 0, -1];
 let dy = [-1, 0, 1, 0];
 
@@ -144,8 +130,8 @@ async function showHelp() {
 "Z = turn right only on blue\n\n" +
 
 "PROGRAM EDITING:\n" +
-"EDIT row col cmd\n" +
-"example: EDIT 0 0 ^\n\n" +
+"E function col cmd\n" +
+"example: E 0 0 ^\n\n" +
 
 "OTHER COMMANDS:\n" +
 "RUN  = execute program\n" +
@@ -198,20 +184,22 @@ async function CLS() {
 }
 
 async function drawAll() {
-    let level = getCurrentLevel();
-
     await PRINT("");
+    await COLOR(1, 0);
+    await CLS();
+
     await PRINT("=== GRID ===");
-    await drawGrid(level, {
-        x: level.start.x,
-        y: level.start.y,
-        dir: level.start.dir
+    await drawGrid(getCurrentLevel(), {
+        x: getCurrentLevel().start.x,
+        y: getCurrentLevel().start.y,
+        dir: getCurrentLevel().start.dir
     });
 
     await PRINT("");
     await PRINT("=== PROGRAM ===");
+    await PRINT("COL:0123456789");
     for (let i = 0; i < PROGRAM.length; i++) {
-        await PRINT("F" + (i + 1) + ": " + PROGRAM[i]);
+        await PRINT("F" + (i) + " :" + PROGRAM[i]);
     }
 }
 async function runProgram() {
@@ -226,17 +214,9 @@ async function runProgram() {
     let stars = countStars(level.grid);
     let stack = [{ fn: 0, pos: 0 }];
 
-    if (stars === 0) {
-    await PRINT("LEVEL "+ levelIndex + " SOLVED!");
     levelIndex++;
+    if (levelIndex >= LEVELS.length) levelIndex = 0;
 
-    if(levelIndex >= LEVELS.length){
-        await PRINT("ALL LEVELS COMPLETE!");
-        levelIndex = 0;
-    }
-
-    return;
-    }
     await PRINT("RUNNING...");
 
     while (stack.length > 0) {
@@ -299,13 +279,13 @@ async function main() {
     while (true) {
         await drawAll();
 
-        let cmd = await INPUT("EDIT r c v | RUN | HELP | QUIT");
+        let cmd = await INPUT("E Fn COL cmd | RUN | HELP | QUIT");
         let p = cmd.trim().split(" ");
 
         if (p[0].toUpperCase() === "HELP") {
             await showHelp();
         }
-        else if (p[0].toUpperCase() === "EDIT") {
+        else if (p[0].toUpperCase() === "E") {
             let r = parseInt(p[1]);
             let c = parseInt(p[2]);
             let v = (p[3] || " ").toUpperCase();
