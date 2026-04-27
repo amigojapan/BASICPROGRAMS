@@ -43,11 +43,7 @@ function getCurrentLevel() {
 let dx = [0, 1, 0, -1];
 let dy = [-1, 0, 1, 0];
 
-let PROGRAM = [
-    "        ",
-    "        ",
-    "        ",
-    "        ",
+var PROGRAM = [
     "        ",
     "        ",
     "        ",
@@ -142,12 +138,109 @@ async function showHelp() {
     await PRINT("PRESS ENTER TO CONTINUE");
     await INPUT();
 }
+async function showHelpES() {
+    let text =
+"=== ROBOZZLE COMANDOS ===\n\n" +
 
+"MOVIMIENTO:\n" +
+"^  = ADELANTE\n" +
+"<  = VUELTA IZQUIERDA\n" +
+">  = VUELAT DERECHA\n\n" +
+
+"FUNCIONES:\n" +
+"0 = LLAMAR F0\n" +
+"1 = LLAMAR F1\n" +
+"2 = LLAMAR F2\n" +
+"3 = LLAMAR F3\n\n" +
+
+"(MAPA) COLOREAR CELDAS:\n" +
+"r = CELDA ROJA\n" +
+"g = CELDA VERDE\n" +
+"b = CELDA AZUL\n" +
+"* = RECOJER ESTRELLA\n\n" +
+
+"COMANDOS CONDITIONALES:\n" +
+"r = ADELANTE SI ES ROJO\n" +
+"g = ADELANTE SI ES VERDE\n" +
+"b = ADELANTE SI ES AZUL\n\n" +
+
+"L = IZQUIERD SI ES ROJO\n" +
+"G = IZQUIERD SI ES VERDE\n" +
+"B = IZQUIERD SI ES AZUL\n\n" +
+
+"R = DERECHA SI ES ROJO\n" +
+"Y = DERECHA SI ES VERDE\n" +
+"Z = DERECHA SI ES AZUL\n\n" +
+
+"EDICION DEL PROGRAMA:\n" +
+"E function col cmd\n" +
+"EJEMPLO: E 0 0 ^\n\n" +
+
+"OTROS COMANDOS:\n" +
+"RUN  = EJECUTAR PROGRAMA\n" +
+"HELPES = MOSTRAR ESTA PANTALLA\n" +
+"QUIT = SALIR\n";
+
+    await MORE(text);
+    await PRINT("PRESS ENTER TO CONTINUE");
+    await INPUT();
+}
+async function showHelpJP() {
+    let text =
+"=== ROBOZZLEコマンド ===\n\n" +
+
+"移動:\n" +
+"^  = 前へ進む\n" +
+"<  = 左に曲がる\n" +
+">  = 右に曲がる\n\n" +
+
+"関数呼び出し:\n" +
+"0 = F0を呼び出す\n" +
+"1 = F1を呼び出す\n" +
+"2 = F2を呼び出す\n" +
+"3 = F3を呼び出す\n\n" +
+
+"（図面）タイルを色をつける:\n" +
+"r = タイルを赤に\n" +
+"g = タイルを緑に\n" +
+"b = タイルを青に\n" +
+"* = 星を拾う\n\n" +
+
+"コディシオナル:\n" +
+"r = 赤なら進む\n" +
+"g = 緑なら進む\n" +
+"b = 青なら進む\n\n" +
+
+"L = 赤なら左に\n" +
+"G = 緑なら左に\n" +
+"B = 青なら左に\n\n" +
+
+"R = 赤なら右に\n" +
+"Y = 緑なら右に\n" +
+"Z = 青なら右に\n\n" +
+
+"プログラム編集:\n" +
+"E 関数 col cmd\n" +
+"例えば: E 0 0 ^\n\n" +
+
+"他のコマンド:\n" +
+"RUN  = プログラム実行\n" +
+"HELPJP = この画面を表示\n" +
+"QUIT = exit\n" +
+"＊全部が半角文字です\n";
+    await MORE(text);
+    await PRINT("PRESS ENTER TO CONTINUE");
+    await INPUT();
+}
+var step=0;
+var isRunning=false;
 async function drawGrid(level, player) {
     if (!player) {
         player = { x: -1, y: -1, dir: 0 };
     }
-
+    if(isRunning) {
+        await PRINT("\nSTEP:" + ++step + "\n");
+    }
     for (let y = 0; y < level.grid.length; y++) {
         for (let x = 0; x < level.grid[y].length; x++) {
             let ch = level.grid[y][x];
@@ -165,12 +258,12 @@ async function drawGrid(level, player) {
                 out = getPlayerChar(player.dir);
                 COLOR(0, 12);
                 LOCATE(x, y + 2);
-                await PRINT(out);
+                await SLOWPRINT(out,0.5);
                 continue;
             }
             COLOR(fg, bg);
             LOCATE(x, y + 2);
-            await PRINT(out);
+            await SLOWPRINT(out,0.5);
         }
     }
 
@@ -197,11 +290,12 @@ async function drawAll() {
 
     await PRINT("");
     await PRINT("=== PROGRAM ===");
-    await PRINT("COL:0123456789");
+    await PRINT("COL:01234567");
     for (let i = 0; i < PROGRAM.length; i++) {
         await PRINT("F" + (i) + " :" + PROGRAM[i]);
     }
 }
+
 async function runProgram() {
     let level = JSON.parse(JSON.stringify(getCurrentLevel()));
 
@@ -214,11 +308,14 @@ async function runProgram() {
     let stars = countStars(level.grid);
     let stack = [{ fn: 0, pos: 0 }];
     running = false;
-    levelIndex++;
-    if (levelIndex >= LEVELS.length) levelIndex = 0;
 
-    await CLS();
+  
     
+ 
+    await CLS();
+    var iterationCount=0;
+    step=0;
+    isRunning=true;
     while (stack.length > 0) {
         let frame = stack[stack.length - 1];
         let row = PROGRAM[frame.fn];
@@ -229,6 +326,19 @@ async function runProgram() {
         }
 
         let cmd = row[frame.pos];
+        if(!isNaN(cmd)) {
+            integer =parseInt(cmd);
+            if(Number.isInteger(integer)) integer++;
+            cmd=integer.toString();
+
+            iterationCount++;
+            if(iterationCount>=50) {
+                await PRINT("ITERATION COUNTER MAX 50 REACHED!\n");
+                await PRINT("YOU PROBABLY HAVE AN INFINITE LOOP!\n");
+                step=0;
+                return;
+            }
+        }
         frame.pos++;
 
         if (cmd === " " || !cmd) continue;
@@ -242,8 +352,15 @@ async function runProgram() {
             let ny = player.y + dy[player.dir];
 
             if (ny < 0 || ny >= level.grid.length || nx < 0 || nx >= level.grid[0].length) {
-                await PRINT("CRASH");
+                await PRINT("CRASHED!");
                 return;
+            }else if (countStars(level.grid) === 0) {
+                levelIndex++;
+                if (levelIndex >= LEVELS.length) levelIndex = 0;
+
+                await CLS();
+            } else {
+                await PRINT("MISSED STARS!");
             }
 
             player.x = nx;
@@ -268,22 +385,49 @@ async function runProgram() {
 
         if (stars === 0) {
             await PRINT("SOLVED!");
+            levelIndex++;
+            if (levelIndex >= LEVELS.length) levelIndex = 0;
+
             return;
         }
     }
 
-    await PRINT("END");
+    await PRINT("PROGRAM END REACHED");
+    if (stars === 0) {
+        levelIndex++;
+        if (levelIndex >= LEVELS.length) levelIndex = 0;
+
+        await CLS();
+    } else {
+        await PRINT("FAILED [COLLECT ALL STARS!]- TRY AGAIN");
+    }
 }
 
 async function main() {
     while (true) {
         await drawAll();
-
-        let cmd = await INPUT("E Fn COL cmd | RUN | HELP | QUIT");
+        await PRINT(          "HELP         | HELPJP | HELPES");
+        await PRINT(          "CLEAR        |        |       ");
+        let cmd = await INPUT("E Fn COL cmd | RUN    | QUIT  ");
         let p = cmd.trim().split(" ");
 
         if (p[0].toUpperCase() === "HELP") {
             await showHelp();
+        }
+        if (p[0].toUpperCase() === "HELPJP") {
+            await showHelpJP();
+        }
+        if (p[0].toUpperCase() === "HELPES") {
+            await showHelpES();
+        }
+        if (p[0].toUpperCase() === "CLEAR") {
+            PROGRAM = [
+                "        ",
+                "        ",
+                "        ",
+                "        "
+            ];
+            await CLS();
         }
         else if (p[0].toUpperCase() === "E") {
             let r = parseInt(p[1]);

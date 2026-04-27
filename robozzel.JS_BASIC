@@ -43,7 +43,7 @@ function getCurrentLevel() {
 let dx = [0, 1, 0, -1];
 let dy = [-1, 0, 1, 0];
 
-let PROGRAM = [
+var PROGRAM = [
     "        ",
     "        ",
     "        ",
@@ -232,12 +232,15 @@ async function showHelpJP() {
     await PRINT("PRESS ENTER TO CONTINUE");
     await INPUT();
 }
-
+var step=0;
+var isRunning=false;
 async function drawGrid(level, player) {
     if (!player) {
         player = { x: -1, y: -1, dir: 0 };
     }
-
+    if(isRunning) {
+        await PRINT("\nSTEP:" + ++step + "\n");
+    }
     for (let y = 0; y < level.grid.length; y++) {
         for (let x = 0; x < level.grid[y].length; x++) {
             let ch = level.grid[y][x];
@@ -255,12 +258,12 @@ async function drawGrid(level, player) {
                 out = getPlayerChar(player.dir);
                 COLOR(0, 12);
                 LOCATE(x, y + 2);
-                await PRINT(out);
+                await SLOWPRINT(out,0.5);
                 continue;
             }
             COLOR(fg, bg);
             LOCATE(x, y + 2);
-            await PRINT(out);
+            await SLOWPRINT(out,0.5);
         }
     }
 
@@ -292,6 +295,7 @@ async function drawAll() {
         await PRINT("F" + (i) + " :" + PROGRAM[i]);
     }
 }
+
 async function runProgram() {
     let level = JSON.parse(JSON.stringify(getCurrentLevel()));
 
@@ -309,7 +313,9 @@ async function runProgram() {
     
  
     await CLS();
-    
+    var iterationCount=0;
+    step=0;
+    isRunning=true;
     while (stack.length > 0) {
         let frame = stack[stack.length - 1];
         let row = PROGRAM[frame.fn];
@@ -324,6 +330,14 @@ async function runProgram() {
             integer =parseInt(cmd);
             if(Number.isInteger(integer)) integer++;
             cmd=integer.toString();
+
+            iterationCount++;
+            if(iterationCount>=50) {
+                await PRINT("ITERATION COUNTER MAX 50 REACHED!\n");
+                await PRINT("YOU PROBABLY HAVE AN INFINITE LOOP!\n");
+                step=0;
+                return;
+            }
         }
         frame.pos++;
 
@@ -392,8 +406,9 @@ async function runProgram() {
 async function main() {
     while (true) {
         await drawAll();
-        await PRINT("HELP | HELPJP | HELPES");
-        let cmd = await INPUT("E Fn COL cmd | RUN | QUIT");
+        await PRINT(          "HELP         | HELPJP | HELPES");
+        await PRINT(          "CLEAR        |        |       ");
+        let cmd = await INPUT("E Fn COL cmd | RUN    | QUIT  ");
         let p = cmd.trim().split(" ");
 
         if (p[0].toUpperCase() === "HELP") {
@@ -405,7 +420,15 @@ async function main() {
         if (p[0].toUpperCase() === "HELPES") {
             await showHelpES();
         }
- 
+        if (p[0].toUpperCase() === "CLEAR") {
+            PROGRAM = [
+                "        ",
+                "        ",
+                "        ",
+                "        "
+            ];
+            await CLS();
+        }
         else if (p[0].toUpperCase() === "E") {
             let r = parseInt(p[1]);
             let c = parseInt(p[2]);
