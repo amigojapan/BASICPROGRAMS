@@ -1,3 +1,7 @@
+1 SX=0:SY=0:SD=0:PX=0:PY=0:PD=0:ST1=0:N=0
+2 LVLIDX=0:ST1ARS=0:MAXLEVEL=30
+3 DIM R$(4), SF(10), SP(10)
+
 10 REM ** Level Data (5 columns × 4 rows per level + coords) **
 20 DATA "....."  : REM Level 1 row1
 30 DATA "..*.."
@@ -11,22 +15,16 @@
 110 DATA 2,2,0
 120 REM (Continue DATA for all 30 levels...)
 130 
-140 DIM R$(4)       : REM Grid rows
-150 DIM SX,SY,SD     : REM Start x,y,dir (0-based)
-160 DIM PX,PY,PD     : REM Player x,y,dir (1-based internally)
-170 DIM SF(10),SP(10): REM Call stack: SF=function, SP=position in string
-180 DIM ST          : REM Stack top
-190 DIM N,LVLIDX,STARS : N for loops, LVLIDX=current level index, STARS count of stars
 
 200 REM ** Load Level **
-210 RESTORE LVLIDX*5+1 : REM assume 5 DATA lines per level (4 grid + 1 coords)
+210 REST1ORE LVLIDX*5+1 : REM assume 5 DATA lines per level (4 grid + 1 coords)
 220 READ R$(1),R$(2),R$(3),R$(4)
 230 READ SX,SY,SD
 240 PX = SX+1 : PY = SY+1 : PD = SD
 250 REM Count stars
-260 STARS=0
+260 ST1ARS=0
 270 FOR I=1 TO 4: FOR J=1 TO 5
-280 IF MID$(R$(I),J,1)="*" THEN STARS=STARS+1
+280 IF MID$(R$(I),J,1)="*" THEN ST1ARS=ST1ARS+1
 290 NEXT J,I
 300 RETURN
 
@@ -64,15 +62,16 @@
 
 900 REM ** Run Program Logic **
 910 REM Copy grid to workspace (modify R$ in place)
-920 ST=1: SF(1)=0: SP(1)=1
-930 WHILE ST>0
-940   FN=SF(ST)
+920 ST1=1: SF(1)=0: SP(1)=1
+930 WHILE ST1>0
+935 IF FRE(0) < 500 THEN PRINT "CLEANING...": X = FRE(0)
+940   FN=SF(ST1)
 945   IF FN=0 THEN C$=MAIN$ ELSE IF FN=1 THEN C$=F1$ ELSE IF FN=2 THEN C$=F2$
 946   IF FN=3 THEN C$=F3$ ELSE IF FN=4 THEN C$=F4$
-950   POS = SP(ST)
-960   IF POS > LEN(C$) THEN ST=ST-1: IF ST=0 THEN GOTO 1100 ELSE  GOTO 940
+950   POS = SP(ST1)
+960   IF POS > LEN(C$) THEN ST1=ST1-1: IF ST1=0 THEN GOTO 1100 ELSE  GOTO 940
 970   CMD$ = MID$(C$,POS,1)
-980   SP(ST)=POS+1
+980   SP(ST1)=POS+1
 990   IF CMD$=" " OR CMD$="" THEN GOTO 940
 1000  TILE$ = MID$(R$(PY),PX,1)
 1010  REM Color match: if tile is colored and cmd is a color or '^'
@@ -87,7 +86,7 @@
 1100    REM Check boundaries
 1110    IF NX<1 OR NX>5 OR NY<1 OR NY>4 THEN PRINT "CRASHED!": GOTO 1200
 1120    REM Move player
-1130    IF MID$(R$(NY),NX,1)="*" THEN STARS=STARS-1
+1130    IF MID$(R$(NY),NX,1)="*" THEN ST1ARS=ST1ARS-1
 1140    REM Clear old player pos
 1150    R$(PY) = LEFT$(R$(PY),PX-1) + "." + MID$(R$(PY),PX+1)
 1160    PX=NX: PY=NY
@@ -96,13 +95,13 @@
 1190  ENDIF
 1200  IF CMD$="<" THEN PD=(PD+3) MOD 4: GOTO 940
 1210  IF CMD$=">" THEN PD=(PD+1) MOD 4: GOTO 940
-1220  CVAL = VAL(CMD$) : IF CVAL>=1 AND CVAL<=4 THEN ST=ST+1: SF(ST)=CVAL: SP(ST)=1
+1220  CVAL = VAL(CMD$) : IF CVAL>=1 AND CVAL<=4 THEN ST1=ST1+1: SF(ST1)=CVAL: SP(ST1)=1
 1230  GOTO 940
 1240 WEND
 
 1100 REM ** End of Run Loop **
 1110 PRINT "Program End."
-1120 IF STARS=0 THEN LVLIDX=LVLIDX+1: IF LVLIDX=MaxLevel THEN LVLIDX=0
+1120 IF ST1ARS=0 THEN LVLIDX=LVLIDX+1: IF LVLIDX=MaxLevel THEN LVLIDX=0
 1130 PRINT "Level Complete! Next level."
 1135 GOSUB 200: GOSUB 400: RETURN
 1140 PRINT "Failed: Missed Stars. Retry."
