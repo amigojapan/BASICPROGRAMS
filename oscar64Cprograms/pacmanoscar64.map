@@ -1,0 +1,191 @@
+sections
+0880 - 2401 : DATA, code
+2401 - 2448 : DATA, data
+2448 - 255e : BSS, bss
+2560 - 9000 : HEAP, heap
+9000 - 9f8a : STACK, stack
+00f7 - 00f7 : ZEROPAGE, zeropage
+0801 - 0853 : DATA, startup
+9ff0 - a000 : SSTACK, sstack
+9ff0 - 9ff0 : SSTACK, putpch@stack
+9ff0 - 9ff0 : SSTACK, puts@stack
+9fe0 - 9ff0 : SSTACK, nformi@stack
+9fe0 - 9ff0 : SSTACK, nforml@stack
+9ff0 - 9ff0 : SSTACK, isinf@stack
+9fe7 - 9ff0 : SSTACK, nformf@stack
+9fce - 9fe0 : SSTACK, sformat@stack
+9f9c - 9fce : SSTACK, printf@stack
+9ff0 - 9ff0 : SSTACK, srand@stack
+9ff0 - 9ff0 : SSTACK, init@stack
+9ff0 - 9ff0 : SSTACK, draw_char@stack
+9ff0 - 9ff0 : SSTACK, get_v@stack
+9ff0 - 9ff0 : SSTACK, draw_map@stack
+9f98 - 9f9c : SSTACK, draw_hud@stack
+9ff0 - 9ff0 : SSTACK, convch@stack
+9ff0 - 9ff0 : SSTACK, getch@stack
+9ff0 - 9ff0 : SSTACK, check_collisions@stack
+9ff0 - 9ff0 : SSTACK, abs@stack
+9ff0 - 9ff0 : SSTACK, rand@stack
+9fe6 - 9ff0 : SSTACK, update_ghosts@stack
+9f8a - 9f98 : SSTACK, main@stack
+
+regions
+00f7 - 00ff : 0000, 0000, zeropage
+0801 - 0880 : 0853, 0052, startup
+0880 - 9000 : 2448, 1cde, main
+
+objects
+00f7 - 00f7 : ZeroStart, START:zeropage
+00f7 - 00f7 : ZeroEnd, END:zeropage
+0801 - 0853 : startup, NATIVE_CODE:startup
+0880 - 0bbc : main, NATIVE_CODE:code
+0bbc - 0be4 : printf, NATIVE_CODE:code
+0be4 - 1027 : sformat, NATIVE_CODE:code
+1027 - 103a : puts, NATIVE_CODE:code
+103a - 109d : putpch, NATIVE_CODE:code
+109d - 11b8 : nformi, NATIVE_CODE:code
+11b8 - 1302 : nforml, NATIVE_CODE:code
+1302 - 1869 : nformf, NATIVE_CODE:code
+1869 - 1878 : isinf, NATIVE_CODE:code
+1878 - 187a : *, DATA:code
+187a - 195b : init, NATIVE_CODE:code
+195b - 196f : *, DATA:code
+196f - 1983 : *, DATA:code
+1983 - 1997 : *, DATA:code
+1997 - 19ab : *, DATA:code
+19ab - 19bf : *, DATA:code
+19bf - 19d3 : *, DATA:code
+19d3 - 19e7 : *, DATA:code
+19e7 - 19fb : *, DATA:code
+19fb - 1a0f : *, DATA:code
+1a0f - 1a23 : *, DATA:code
+1a23 - 1a37 : *, DATA:code
+1a37 - 1a4b : *, DATA:code
+1a4b - 1a5f : *, DATA:code
+1a5f - 1a73 : *, DATA:code
+1a73 - 1aae : draw_map, NATIVE_CODE:code
+1aae - 1ade : get_v, NATIVE_CODE:code
+1ade - 1b3c : draw_hud, NATIVE_CODE:code
+1b3c - 1b3e : *, DATA:code
+1b3e - 1b40 : *, DATA:code
+1b40 - 1b68 : *, DATA:code
+1b68 - 1b73 : *, DATA:code
+1b73 - 1b80 : *, DATA:code
+1b80 - 1b8c : getch, NATIVE_CODE:code
+1b8c - 1bbe : convch, NATIVE_CODE:code
+1bbe - 1c8c : check_collisions, NATIVE_CODE:code
+1c8c - 1eb6 : update_ghosts, NATIVE_CODE:code
+1eb6 - 1ed0 : abs, NATIVE_CODE:code
+1ed0 - 1ef7 : rand, NATIVE_CODE:code
+1ef7 - 1f3c : freg, NATIVE_CODE:code
+1f3c - 2029 : faddsub, NATIVE_CODE:code
+2029 - 20c3 : crt_fmul, NATIVE_CODE:code
+20c3 - 20f1 : crt_fmul8, NATIVE_CODE:code
+20f1 - 219f : crt_fdiv, NATIVE_CODE:code
+219f - 21bd : divs16, NATIVE_CODE:code
+21bd - 21cb : negaccu, NATIVE_CODE:code
+21cb - 21d9 : negtmp, NATIVE_CODE:code
+21d9 - 225a : divmod, NATIVE_CODE:code
+225a - 2279 : mods16, NATIVE_CODE:code
+2279 - 2287 : negtmpb, NATIVE_CODE:code
+2287 - 22d3 : f32_to_i16, NATIVE_CODE:code
+22d3 - 22f1 : sint16_to_float, NATIVE_CODE:code
+22f1 - 231a : uint16_to_float, NATIVE_CODE:code
+231a - 2401 : divmod32, NATIVE_CODE:code
+2401 - 2402 : spentry, DATA:data
+2402 - 2403 : giocharmap, DATA:data
+2403 - 241f : fround5, DATA:data
+241f - 2421 : sc, DATA:data
+2421 - 2423 : li, DATA:data
+2423 - 2425 : pm, DATA:data
+2425 - 2427 : te, DATA:data
+2427 - 2428 : p_sprite, DATA:data
+2428 - 242a : seed, DATA:data
+242a - 2446 : map_data, DATA:data
+2446 - 2448 : skip_turn, DATA:data
+2448 - 2448 : BSSStart, START:bss
+2448 - 2552 : b, DATA:bss
+2552 - 2554 : px, DATA:bss
+2554 - 2556 : py, DATA:bss
+2556 - 255a : gx, DATA:bss
+255a - 255e : gy, DATA:bss
+255e - 255e : BSSEnd, END:bss
+9f8a - 9f8a : StackEnd, END:stack
+9f8a - 9f98 : main@stack, BSS:main@stack
+9f98 - 9f9c : draw_hud@stack, BSS:draw_hud@stack
+9f9c - 9fce : buff, BSS:printf@stack
+9fce - 9fd8 : sformat@stack, BSS:sformat@stack
+9fd8 - 9fe0 : si, BSS:sformat@stack
+9fe0 - 9ff0 : buffer, BSS:nformi@stack
+9fe0 - 9ff0 : buffer, BSS:nforml@stack
+9fe6 - 9ff0 : update_ghosts@stack, BSS:update_ghosts@stack
+9fe7 - 9ff0 : nformf@stack, BSS:nformf@stack
+9ff0 - a000 : sstack, STACK:sstack
+
+objects by size
+1302 (0567) : nformf, NATIVE_CODE:code
+0be4 (0443) : sformat, NATIVE_CODE:code
+0880 (033c) : main, NATIVE_CODE:code
+1c8c (022a) : update_ghosts, NATIVE_CODE:code
+11b8 (014a) : nforml, NATIVE_CODE:code
+109d (011b) : nformi, NATIVE_CODE:code
+2448 (010a) : b, DATA:bss
+1f3c (00ed) : faddsub, NATIVE_CODE:code
+231a (00e7) : divmod32, NATIVE_CODE:code
+187a (00e1) : init, NATIVE_CODE:code
+1bbe (00ce) : check_collisions, NATIVE_CODE:code
+20f1 (00ae) : crt_fdiv, NATIVE_CODE:code
+2029 (009a) : crt_fmul, NATIVE_CODE:code
+21d9 (0081) : divmod, NATIVE_CODE:code
+103a (0063) : putpch, NATIVE_CODE:code
+1ade (005e) : draw_hud, NATIVE_CODE:code
+0801 (0052) : startup, NATIVE_CODE:startup
+2287 (004c) : f32_to_i16, NATIVE_CODE:code
+1ef7 (0045) : freg, NATIVE_CODE:code
+1a73 (003b) : draw_map, NATIVE_CODE:code
+1b8c (0032) : convch, NATIVE_CODE:code
+9f9c (0032) : buff, BSS:printf@stack
+1aae (0030) : get_v, NATIVE_CODE:code
+20c3 (002e) : crt_fmul8, NATIVE_CODE:code
+22f1 (0029) : uint16_to_float, NATIVE_CODE:code
+0bbc (0028) : printf, NATIVE_CODE:code
+1ed0 (0027) : rand, NATIVE_CODE:code
+225a (001f) : mods16, NATIVE_CODE:code
+219f (001e) : divs16, NATIVE_CODE:code
+22d3 (001e) : sint16_to_float, NATIVE_CODE:code
+2403 (001c) : fround5, DATA:data
+242a (001c) : map_data, DATA:data
+1eb6 (001a) : abs, NATIVE_CODE:code
+1027 (0013) : puts, NATIVE_CODE:code
+9fe0 (0010) : buffer, BSS:nformi@stack
+9fe0 (0010) : buffer, BSS:nforml@stack
+9ff0 (0010) : sstack, STACK:sstack
+1869 (000f) : isinf, NATIVE_CODE:code
+21bd (000e) : negaccu, NATIVE_CODE:code
+21cb (000e) : negtmp, NATIVE_CODE:code
+2279 (000e) : negtmpb, NATIVE_CODE:code
+9f8a (000e) : main@stack, BSS:main@stack
+1b80 (000c) : getch, NATIVE_CODE:code
+9fce (000a) : sformat@stack, BSS:sformat@stack
+9fe6 (000a) : update_ghosts@stack, BSS:update_ghosts@stack
+9fe7 (0009) : nformf@stack, BSS:nformf@stack
+9fd8 (0008) : si, BSS:sformat@stack
+2556 (0004) : gx, DATA:bss
+255a (0004) : gy, DATA:bss
+9f98 (0004) : draw_hud@stack, BSS:draw_hud@stack
+241f (0002) : sc, DATA:data
+2421 (0002) : li, DATA:data
+2423 (0002) : pm, DATA:data
+2425 (0002) : te, DATA:data
+2428 (0002) : seed, DATA:data
+2446 (0002) : skip_turn, DATA:data
+2552 (0002) : px, DATA:bss
+2554 (0002) : py, DATA:bss
+2401 (0001) : spentry, DATA:data
+2402 (0001) : giocharmap, DATA:data
+2427 (0001) : p_sprite, DATA:data
+00f7 (0000) : ZeroStart, START:zeropage
+00f7 (0000) : ZeroEnd, END:zeropage
+2448 (0000) : BSSStart, START:bss
+255e (0000) : BSSEnd, END:bss
+9f8a (0000) : StackEnd, END:stack
