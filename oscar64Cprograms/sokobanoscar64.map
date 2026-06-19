@@ -1,0 +1,204 @@
+sections
+0880 - 23b6 : DATA, code
+17ff - 2b8c : DATA, data
+2b8c - 3646 : BSS, bss
+3648 - 9000 : HEAP, heap
+9000 - 9f5d : STACK, stack
+00f7 - 00f7 : ZEROPAGE, zeropage
+0801 - 0853 : DATA, startup
+9fe9 - a000 : SSTACK, sstack
+9fe9 - 9fe9 : SSTACK, putpch@stack
+9fe9 - 9fe9 : SSTACK, putchar@stack
+9fe9 - 9fe9 : SSTACK, strlen@stack
+9fe9 - 9fe9 : SSTACK, load_level@stack
+9fe9 - 9fe9 : SSTACK, clrscr@stack
+9fe9 - 9fe9 : SSTACK, gotoxy@stack
+9fe9 - 9fe9 : SSTACK, puts@stack
+9fd9 - 9fe9 : SSTACK, nformi@stack
+9fd9 - 9fe9 : SSTACK, nforml@stack
+9fe9 - 9fe9 : SSTACK, isinf@stack
+9fe0 - 9fe9 : SSTACK, nformf@stack
+9fc7 - 9fd9 : SSTACK, sformat@stack
+9f95 - 9fc7 : SSTACK, printf@stack
+9fc5 - 9fc7 : SSTACK, sprintf@stack
+9f6c - 9f95 : SSTACK, update_ui@stack
+9f91 - 9f95 : SSTACK, draw_tile@stack
+9f8d - 9f91 : SSTACK, draw_full_board@stack
+9fe9 - 9fe9 : SSTACK, check_win@stack
+9fe9 - 9fe9 : SSTACK, kbhit@stack
+9fe9 - 9fe9 : SSTACK, convch@stack
+9fe9 - 9fe9 : SSTACK, getch@stack
+9fe9 - 9fe9 : SSTACK, get_input@stack
+9f62 - 9f6c : SSTACK, execute_input@stack
+9f5d - 9f62 : SSTACK, main@stack
+
+regions
+00f7 - 00ff : 0000, 0000, zeropage
+0801 - 0880 : 0853, 0052, startup
+0880 - 9000 : 2b8c, 2dc6, main
+
+objects
+00f7 - 00f7 : ZeroStart, START:zeropage
+00f7 - 00f7 : ZeroEnd, END:zeropage
+0801 - 0853 : startup, NATIVE_CODE:startup
+0880 - 09f1 : main, NATIVE_CODE:code
+09f1 - 0a54 : putpch, NATIVE_CODE:code
+0a54 - 0b68 : load_level, NATIVE_CODE:code
+0b68 - 0b84 : strlen, NATIVE_CODE:code
+0b84 - 0b8e : clrscr, NATIVE_CODE:code
+0b8e - 0b97 : gotoxy, NATIVE_CODE:code
+0b97 - 0bbf : printf, NATIVE_CODE:code
+0bbf - 1002 : sformat, NATIVE_CODE:code
+1002 - 1015 : puts, NATIVE_CODE:code
+1015 - 1130 : nformi, NATIVE_CODE:code
+1130 - 127a : nforml, NATIVE_CODE:code
+127a - 17e1 : nformf, NATIVE_CODE:code
+17e1 - 17f0 : isinf, NATIVE_CODE:code
+17f0 - 17f3 : *, DATA:code
+17f3 - 17f7 : *, DATA:code
+17f7 - 17fb : *, DATA:code
+17fb - 17ff : *, DATA:code
+17ff - 1800 : spentry, DATA:data
+1800 - 181a : *, DATA:code
+181a - 187c : update_ui, NATIVE_CODE:code
+187c - 18cc : sprintf, NATIVE_CODE:code
+18cc - 18f4 : *, DATA:code
+18f4 - 1934 : draw_full_board, NATIVE_CODE:code
+1934 - 1a3d : draw_tile, NATIVE_CODE:code
+1a3d - 1a41 : *, DATA:code
+1a41 - 1a61 : *, DATA:code
+1a61 - 1add : check_win, NATIVE_CODE:code
+1add - 1ae4 : kbhit, NATIVE_CODE:code
+1ae4 - 1af0 : getch, NATIVE_CODE:code
+1af0 - 1afe : negaccu, NATIVE_CODE:code
+1afe - 1aff : giocharmap, DATA:data
+1b00 - 1b29 : *, DATA:code
+1b29 - 1b71 : get_input, NATIVE_CODE:code
+1b71 - 1ba3 : convch, NATIVE_CODE:code
+1ba3 - 1dc5 : execute_input, NATIVE_CODE:code
+1dc5 - 1dee : *, DATA:code
+1dee - 1dfc : negtmp, NATIVE_CODE:code
+1dfc - 1e00 : __multab656L, DATA:code
+1e00 - 1e29 : *, DATA:code
+1e29 - 1e52 : *, DATA:code
+1e52 - 1e7b : *, DATA:code
+1e7b - 1ea4 : *, DATA:code
+1ea4 - 1ee9 : freg, NATIVE_CODE:code
+1ee9 - 1fd6 : faddsub, NATIVE_CODE:code
+1fd6 - 2070 : crt_fmul, NATIVE_CODE:code
+2070 - 209e : crt_fmul8, NATIVE_CODE:code
+209e - 214c : crt_fdiv, NATIVE_CODE:code
+214c - 216a : divs16, NATIVE_CODE:code
+216a - 21eb : divmod, NATIVE_CODE:code
+21eb - 220a : mods16, NATIVE_CODE:code
+220a - 2218 : negtmpb, NATIVE_CODE:code
+2218 - 2264 : f32_to_i16, NATIVE_CODE:code
+2264 - 2282 : sint16_to_float, NATIVE_CODE:code
+2282 - 22ab : uint16_to_float, NATIVE_CODE:code
+22ab - 2392 : divmod32, NATIVE_CODE:code
+2392 - 2396 : __multab656H, DATA:code
+2396 - 23a6 : __multab80L, DATA:code
+23a6 - 23b6 : __multab80H, DATA:code
+23b6 - 23b8 : num_boxes, DATA:data
+23b8 - 23ba : level_moves, DATA:data
+23ba - 2b6a : levels, DATA:data
+2b6a - 2b6c : px, DATA:data
+2b6c - 2b6e : py, DATA:data
+2b6e - 2b8a : fround5, DATA:data
+2b8a - 2b8c : total_moves, DATA:data
+2b8c - 2b8c : BSSStart, START:bss
+2b8c - 308c : walls, DATA:bss
+308c - 358c : goals, DATA:bss
+358c - 35d2 : box_x, DATA:bss
+3600 - 3646 : box_y, DATA:bss
+3646 - 3646 : BSSEnd, END:bss
+9f5d - 9f62 : main@stack, BSS:main@stack
+9f5d - 9f5d : StackEnd, END:stack
+9f62 - 9f6c : execute_input@stack, BSS:execute_input@stack
+9f6c - 9f95 : buffer, BSS:update_ui@stack
+9f8d - 9f91 : draw_full_board@stack, BSS:draw_full_board@stack
+9f91 - 9f95 : draw_tile@stack, BSS:draw_tile@stack
+9f95 - 9fc7 : buff, BSS:printf@stack
+9fc5 - 9fc7 : sprintf@stack, BSS:sprintf@stack
+9fc7 - 9fd1 : sformat@stack, BSS:sformat@stack
+9fd1 - 9fd9 : si, BSS:sformat@stack
+9fd9 - 9fe9 : buffer, BSS:nforml@stack
+9fd9 - 9fe9 : buffer, BSS:nformi@stack
+9fe0 - 9fe9 : nformf@stack, BSS:nformf@stack
+9fe9 - a000 : sstack, STACK:sstack
+
+objects by size
+23ba (07b0) : levels, DATA:data
+127a (0567) : nformf, NATIVE_CODE:code
+2b8c (0500) : walls, DATA:bss
+308c (0500) : goals, DATA:bss
+0bbf (0443) : sformat, NATIVE_CODE:code
+1ba3 (0222) : execute_input, NATIVE_CODE:code
+0880 (0171) : main, NATIVE_CODE:code
+1130 (014a) : nforml, NATIVE_CODE:code
+1015 (011b) : nformi, NATIVE_CODE:code
+0a54 (0114) : load_level, NATIVE_CODE:code
+1934 (0109) : draw_tile, NATIVE_CODE:code
+1ee9 (00ed) : faddsub, NATIVE_CODE:code
+22ab (00e7) : divmod32, NATIVE_CODE:code
+209e (00ae) : crt_fdiv, NATIVE_CODE:code
+1fd6 (009a) : crt_fmul, NATIVE_CODE:code
+216a (0081) : divmod, NATIVE_CODE:code
+1a61 (007c) : check_win, NATIVE_CODE:code
+09f1 (0063) : putpch, NATIVE_CODE:code
+181a (0062) : update_ui, NATIVE_CODE:code
+0801 (0052) : startup, NATIVE_CODE:startup
+187c (0050) : sprintf, NATIVE_CODE:code
+2218 (004c) : f32_to_i16, NATIVE_CODE:code
+1b29 (0048) : get_input, NATIVE_CODE:code
+358c (0046) : box_x, DATA:bss
+3600 (0046) : box_y, DATA:bss
+1ea4 (0045) : freg, NATIVE_CODE:code
+18f4 (0040) : draw_full_board, NATIVE_CODE:code
+1b71 (0032) : convch, NATIVE_CODE:code
+9f95 (0032) : buff, BSS:printf@stack
+2070 (002e) : crt_fmul8, NATIVE_CODE:code
+2282 (0029) : uint16_to_float, NATIVE_CODE:code
+9f6c (0029) : buffer, BSS:update_ui@stack
+0b97 (0028) : printf, NATIVE_CODE:code
+21eb (001f) : mods16, NATIVE_CODE:code
+214c (001e) : divs16, NATIVE_CODE:code
+2264 (001e) : sint16_to_float, NATIVE_CODE:code
+0b68 (001c) : strlen, NATIVE_CODE:code
+2b6e (001c) : fround5, DATA:data
+9fe9 (0017) : sstack, STACK:sstack
+1002 (0013) : puts, NATIVE_CODE:code
+2396 (0010) : __multab80L, DATA:code
+23a6 (0010) : __multab80H, DATA:code
+9fd9 (0010) : buffer, BSS:nforml@stack
+9fd9 (0010) : buffer, BSS:nformi@stack
+17e1 (000f) : isinf, NATIVE_CODE:code
+1af0 (000e) : negaccu, NATIVE_CODE:code
+1dee (000e) : negtmp, NATIVE_CODE:code
+220a (000e) : negtmpb, NATIVE_CODE:code
+1ae4 (000c) : getch, NATIVE_CODE:code
+0b84 (000a) : clrscr, NATIVE_CODE:code
+9f62 (000a) : execute_input@stack, BSS:execute_input@stack
+9fc7 (000a) : sformat@stack, BSS:sformat@stack
+0b8e (0009) : gotoxy, NATIVE_CODE:code
+9fe0 (0009) : nformf@stack, BSS:nformf@stack
+9fd1 (0008) : si, BSS:sformat@stack
+1add (0007) : kbhit, NATIVE_CODE:code
+9f5d (0005) : main@stack, BSS:main@stack
+1dfc (0004) : __multab656L, DATA:code
+2392 (0004) : __multab656H, DATA:code
+9f8d (0004) : draw_full_board@stack, BSS:draw_full_board@stack
+9f91 (0004) : draw_tile@stack, BSS:draw_tile@stack
+23b6 (0002) : num_boxes, DATA:data
+23b8 (0002) : level_moves, DATA:data
+2b6a (0002) : px, DATA:data
+2b6c (0002) : py, DATA:data
+2b8a (0002) : total_moves, DATA:data
+9fc5 (0002) : sprintf@stack, BSS:sprintf@stack
+17ff (0001) : spentry, DATA:data
+1afe (0001) : giocharmap, DATA:data
+00f7 (0000) : ZeroStart, START:zeropage
+00f7 (0000) : ZeroEnd, END:zeropage
+2b8c (0000) : BSSStart, START:bss
+3646 (0000) : BSSEnd, END:bss
+9f5d (0000) : StackEnd, END:stack
